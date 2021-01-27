@@ -1,0 +1,12 @@
+click_log
+click_completion
+sphinx_togglebutton
+sphinx-copybutton
+sphinxcontrib-bibtex
+jupyter-book
+sphinx-book-theme
+markdown-it-py
+pydata-sphinx-theme
+rio-toa
+rio-l8qa
+python-dateutil

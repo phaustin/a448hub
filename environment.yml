@@ -1,0 +1,32 @@
+name: notebook
+channels:
+  - eoas_ubc
+  - conda-forge
+dependencies:
+  - base-notebook=2020.09.05
+  # NOTE: pip required for running tests in this repo
+  - python=3.8
+  - pip=20
+  - numpy
+  - scipy
+  - a301_lib
+  - matplotlib
+  - netcdf4
+  - pyhdf
+  - hdf4
+  - h5py
+  - Pillow
+  - jupytext
+  - cartopy
+  - pyresample
+  - earthpy
+  - rasterio
+  - fiona
+  - pandas
+  - pytest
+  - shapely
+  - requests
+  - bs4
+  - geopandas
+  - conda-lock
+# conda-lock -f environment.yml -p linux-64
