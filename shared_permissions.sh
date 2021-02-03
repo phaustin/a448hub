@@ -2,7 +2,7 @@
 #
 # prepare a folder for bind mount
 #
-NBDIR=/ScratchSSD/docker/a301_setup/a301_2020/data_share
+NBDIR=/home/phil/repos/a448hub/data_share
 mkdir "$NBDIR"
 # make it owned by the GID of the notebook containers.
 # This is 100 in the jupyter docker-stacks,

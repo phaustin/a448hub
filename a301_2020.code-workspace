@@ -1,0 +1,21 @@
+// https://itnext.io/easy-enhancements-for-vs-codes-terminal-6dda2c22ee5c
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../temp/notebooks"
+		},
+		{
+			"path": "../jupyter-book/docs"
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"terminalCursor.foreground": "#00ffaa"
+		 },
+		"terminal.integrated.cursorBlinking": true,
+		"terminals.autorun": true,
+	}
+}

@@ -1,0 +1,30 @@
+# Book settings
+######################################################################################
+# Book settings
+title: "ATSC 301"
+author: Philip Austin
+email: paustin@eoas.ubc.ca
+description: >- # this means to ignore newlines until "baseurl:"
+  Website for EOAS ATSC 301
+
+execute:
+  execute_notebooks: off
+
+exclude_patterns: ["*ipynb"]
+
+repository:
+  url: https://github.com/phaustin/a448hub
+  branch: master
+  path_to_book: notebooks
+
+launch_buttons:
+  notebook_interface: "classic" # The interface interactive links will activate ["classic", "jupyterlab"]
+  jupyterhub_url: http://jupyterhub-2.eoas.ubc.ca:8000
+  
+html:
+  home_page_in_navbar: true
+  baseurl: https://jupyterhub-2.eoas.ubc.ca:8080
+  
+
+
+
