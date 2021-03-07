@@ -52,6 +52,36 @@ services:
       context: a448book_image
     container_name: a448book_jan26
 
+  alison_feb10:
+    image: phaustin/alison:feb10
+    build:
+      context: alison_image
+    container_name: alison_feb10
+
+  andersen_feb10:
+    image: phaustin/andersen:feb10
+    build:
+      context: andersen_image
+    container_name: andersen_feb10
+
+  justin_feb10:
+    image: phaustin/justin:feb10
+    build:
+      context: justin_image
+    container_name: justin_feb10
+
+  marjolein_feb10:
+    image: phaustin/marjolein:feb10
+    build:
+      context: marjolein_image
+    container_name: marjolein_feb10
+
+  shuting_feb10:
+    image: phaustin/shuting:feb10
+    build:
+      context: shuting_image
+    container_name: shuting_feb10
+    
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:
 # c.DockerSpawner.network_name = 'jupyterhub'

@@ -3,7 +3,7 @@
 # prepare a folder for bind mount
 #
 NBDIR=/home/phil/repos/a448hub/data_share
-mkdir "$NBDIR"
+#mkdir "$NBDIR"
 # make it owned by the GID of the notebook containers.
 # This is 100 in the jupyter docker-stacks,
 # but should be whatever GID your containers run as
