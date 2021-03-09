@@ -13,7 +13,7 @@ c.JupyterHub.hub_connect_ip = 'a448hub_jan26'
 # pick a docker image. This should have the same version of jupyterhub
 # in it as our Hub.
 c.DockerSpawner.image = 'phaustin/a448book:jan26'
-c.DockerSpawner.image_whitelist = {'alison':'phaustin/alison:feb10',
+c.DockerSpawner.image_whitelist = {'alison':'phaustin/alison:mar08',
                                    'andersen':'phaustin/andersen:feb10',
                                    'justin':'phaustin/a448book:jan26',
                                    'marjolein':'phaustin/a448book:jan26',

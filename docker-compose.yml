@@ -52,11 +52,11 @@ services:
       context: a448book_image
     container_name: a448book_jan26
 
-  alison_feb10:
-    image: phaustin/alison:feb10
+  alison_mar08:
+    image: phaustin/alison:mar08
     build:
       context: alison_image
-    container_name: alison_feb10
+    container_name: alison_mar08
 
   andersen_feb10:
     image: phaustin/andersen:feb10
