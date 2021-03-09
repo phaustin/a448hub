@@ -13,14 +13,6 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
-#!conda install mamba -y
-#!mamba install intake -y
-# !mamba install xarray -y
-# !mamba install -c conda-forge gcsfs -y
-# !mamba install -c conda-forge zarr -y
-```
-
-```{code-cell} ipython3
 import context
 import warnings
 import intake
@@ -33,29 +25,154 @@ import cartopy.crs as ccrs
 from pathlib import Path
 import pandas as pd
 from a448_lib import data_read
+import fsspec
+import cmocean as cm
+import cartopy.feature as cfeature
+import numpy as np
 ```
 
 ```{code-cell} ipython3
-filename = "pangeo-cmip6.csv"
-root = "https://cmip6.storage.googleapis.com"
-if Path(filename).is_file():
-    print(f"found {filename}")
+#!mamba install -c conda-forge intake-esm -y
+#!mamba install -c conda-forge cmocean -y
+```
+
+```{code-cell} ipython3
+csv_filename = "pangeo-cmip6.csv"
+root = "https://storage.googleapis.com/cmip6"
+if Path(csv_filename).is_file():
+    print(f"found {csv_filename}")
 else:
-    print(f"downloading {filename}")
-    data_read.download(filename,root=root)
+    print(f"downloading {csv_filename}")
+    data_read.download(csv_filename,root=root)
     
+json_filename="https://storage.googleapis.com/cmip6/pangeo-cmip6.json"
 ```
 
 ```{code-cell} ipython3
-df = pd.read_csv(filename)
+catalog_df=pd.read_csv(csv_filename)
+catalog_df.head()
 ```
 
-### First show all CCCma and MOHC historical runs with the variable sithick
+```{code-cell} ipython3
+col = intake.open_esm_datastore(json_filename)
+```
 
 ```{code-cell} ipython3
-cccma_sithick =df.query("activity_id=='CMIP' & institution_id == 'CCCma' & table_id=='SImon'"
-            "& experiment_id == 'historical'& variable_id=='sithick'")
-print(f"{cccma_sithick.head()=}")
+col
+```
+
+### First show all CCCma historical sithick instances
+
+```{code-cell} ipython3
+source = "CanESM5"
+query = dict(
+    experiment_id=['historical'],
+    institution_id = "CCCma",
+    source_id = source,
+    table_id=["SImon"],
+    variable_id=['sithick'])
+
+col_subset = col.search(require_all_on=["source_id"],**query)
+```
+
+```{code-cell} ipython3
+col_subset.df.head()
+```
+
+```{code-cell} ipython3
+len(col_subset.df)
+```
+
+```{code-cell} ipython3
+member = 'r1i1p2f1'
+filename=col_subset.df.query("member_id=='r1i1p2f1'")['zstore'].iloc[0]
+```
+
+```{code-cell} ipython3
+dset_cccma_sithick=xr.open_zarr(fsspec.get_mapper(filename), consolidated=True)
+dset_cccma_sithick
+```
+
+```{code-cell} ipython3
+query = dict(
+    experiment_id=['historical'],
+    institution_id = "CCCma",
+    table_id = "Ofx",
+    source_id = source,
+    member_id = member,
+    variable_id=['areacello'])
+
+col_subset = col.search(require_all_on=["source_id"],**query)
+col_subset.df
+```
+
+```{code-cell} ipython3
+filename=col_subset.df['zstore'].iloc[0]
+filename
+```
+
+```{code-cell} ipython3
+dset_cccma_areacello=xr.open_zarr(fsspec.get_mapper(filename), consolidated=True)
+dset_cccma_areacello
+```
+
+```{code-cell} ipython3
+lons = dset_cccma_sithick.longitude
+lats = dset_cccma_sithick.latitude
+data = dset_cccma_sithick['sithick']
+```
+
+```{code-cell} ipython3
+lons.shape
+lats.shape
+data.shape
+```
+
+```{code-cell} ipython3
+plt.plot(lons[-30:],lats[-30:],'r.');
+```
+
+```{code-cell} ipython3
+def deseam(lon, lat, data):
+    """
+    Function to get rid of the "seam" that shows up on 
+    the map when you're using these curvilinear grids.
+    """
+    i, j = lat.shape
+    new_lon = np.zeros((i, j + 1))
+    new_lon[:, :-1] = lon
+    new_lon[:, -1] = lon[:, 0]
+
+    new_lat = np.zeros((i, j + 1))
+    new_lat[:, :-1] = lat
+    new_lat[:, -1] = lat[:, 0]
+
+    new_data = np.zeros((i, j + 1))
+    new_data[:, :-1] = data
+    new_data[:, -1] = data[:, 0]
+    new_data = np.ma.array(new_data, mask=np.isnan(new_data))
+    return new_lon, new_lat, new_data
+```
+
+```{code-cell} ipython3
+lons, lats, newdata = deseam(lons,lats,data[0,:,:])
+```
+
+```{code-cell} ipython3
+f, ax = plt.subplots(1,1,figsize=(12,12),
+                     subplot_kw=dict(projection=ccrs.Orthographic(0, 80)))
+
+p = ax.pcolormesh(lons,
+              lats,
+              newdata,
+              transform=ccrs.PlateCarree(),
+              vmin=0, vmax=8, cmap=cm.cm.ice)
+
+f.colorbar(p, label='sea ice thickness (m)')
+ax.set_title('CCCma sea ice thickness (m)')
+
+# Add land.
+ax.add_feature(cfeature.LAND, color='#a9a9a9', zorder=4);
 ```
 
 ### now mohc
