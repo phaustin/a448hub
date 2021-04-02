@@ -52,11 +52,11 @@ services:
       context: a448book_image
     container_name: a448book_jan26
 
-  alison_mar08:
-    image: phaustin/alison:mar08
+  alison_mar31:
+    image: phaustin/alison:mar31
     build:
       context: alison_image
-    container_name: alison_mar08
+    container_name: alison_mar31
 
   andersen_feb10:
     image: phaustin/andersen:feb10
@@ -64,11 +64,11 @@ services:
       context: andersen_image
     container_name: andersen_feb10
 
-  justin_feb10:
-    image: phaustin/justin:feb10
+  justin_mar21:
+    image: phaustin/justin:mar21
     build:
       context: justin_image
-    container_name: justin_feb10
+    container_name: justin_mar21
 
   marjolein_feb10:
     image: phaustin/marjolein:feb10

@@ -31,6 +31,14 @@ import cartopy.feature as cfeature
 import numpy as np
 ```
 
+# Sea-ice thickness demo
+
+http://gallery.pangeo.io/repos/pangeo-gallery/cmip6/index.html
+
+http://xarray.pydata.org/en/stable/weather-climate.html
+
++++
+
 # Plot CanESM5 sea ice thickness
 
 +++
@@ -67,6 +75,18 @@ col
 ```
 
 ## First show all 40 CCCma historical runs
+
+```{code-cell} ipython3
+source = "CanESM5"
+query = dict(
+    experiment_id=['historical'],
+    institution_id = "CCCma",
+    source_id = source)
+
+col_subset = col.search(require_all_on=["source_id"],**query)
+names=set(col_subset.df.variable_id)
+names
+```
 
 ```{code-cell} ipython3
 source = "CanESM5"
@@ -189,6 +209,14 @@ ax.add_feature(cfeature.LAND, color='#a9a9a9', zorder=4);
 ## Now do a mean climatology: 1970-2000
 
 ```{code-cell} ipython3
+climatology =  dset_cccma_sithick['sithick'].sel(time=slice('1970', '2000'))
+```
+
+```{code-cell} ipython3
+climatology.time
+```
+
+```{code-cell} ipython3
 # Take a seasonal climatology over 1970-2000
 climatology = dset_cccma_sithick['sithick'].sel(time=slice('1970', '2000')).groupby('time.season').mean('time')
 ```
@@ -251,4 +279,27 @@ aw_arctic_ice = aw_arctic_ice.compute()
 fig, ax = plt.subplots(1,1)
 lines = aw_arctic_ice.groupby('time.year').mean('time').plot(ax=ax)
 ax.grid(True)
+```
+
+```{code-cell} ipython3
+col_subset.df
+```
+
+```{code-cell} ipython3
+member = 'r30i1p2f1'
+filename=col_subset.df.query("member_id=='r30i1p2f1'")['zstore'].iloc[0]
+dset_cccma_sithick_r30i1p2f1=xr.open_zarr(fsspec.get_mapper(filename), consolidated=True)
+dset_cccma_sithick_r30i1p2f1['sithick']
+```
+
+```{code-cell} ipython3
+dset_cccma_sithick['sithick']
+```
+
+```{code-cell} ipython3
+dset_cccma_sithick['sithick'].values
+```
+
+```{code-cell} ipython3
+
 ```
